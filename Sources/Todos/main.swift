@@ -4,6 +4,8 @@ import ShellOut
 // TODO: Organize code structure
 // TODO: Only look for TODOs in changed chunks, not the entire file
 
+/// Retrieves all files currently not committed in the user's working copy. These include staged and unstaged changes as well as files that have not yet been git-added.
+/// - Returns: An array of file paths relative to the current working directory
 func getModifiedFiles() -> [String] {
     let gitCommands = [
         "git diff --name-only",
