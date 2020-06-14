@@ -8,22 +8,25 @@
 import Foundation
 
 class TodoFinder {
-    static func getTodoLines(in file: File) -> [Line] {
-        // let keywords = ["TODO", "FIXME"]
-        let keyword = "// TODO:"
+    static let keyword = "// TODO:"
 
+    static func getTodoLines(in file: File) -> [Line] {
         var result = [Line]()
 
         for line in file.content {
             if line.qualifies(for: keyword) {
-                result.append(line)
+                result.append(cleaned(line: line))
             }
         }
 
         return result
     }
 
-    static func cleaned(line: String) -> String {
-        return line.trimmingCharacters(in: .whitespaces)
+    static func cleaned(line: Line) -> Line {
+        // TODO: Replace this with Regex
+        let trimmed = line.content
+            .replacingOccurrences(of: keyword, with: "")
+            .trimmingCharacters(in: .whitespaces)
+        return Line(number: line.number, content: trimmed)
     }
 }

@@ -19,3 +19,9 @@ struct File {
             .map { Line(number: $0 + 1, content: String($1)) }
     }
 }
+
+extension File: CustomDebugStringConvertible {
+    var debugDescription: String {
+        return "File \(name) with \(content.count) lines"
+    }
+}
