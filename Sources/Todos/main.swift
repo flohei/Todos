@@ -25,27 +25,19 @@ func getModifiedFiles() -> [String] {
     return gitResult?.split(separator: "\n").map { String($0) } ?? []
 }
 
-func grepTodo(in file: String) -> String? {
-    let grepCommand = "grep -E -C2 'TODO|FIXME'"
-    return try? shellOut(to: grepCommand, arguments: [file])
-}
-
-func getTodos() -> [String: String] {
-    let modifiedFiles = getModifiedFiles()
-
-    var todos = [String: String]()
-
-    for file in modifiedFiles {
-        guard let issues = grepTodo(in: file) else { continue }
-        todos[file] = issues
+func printTodos(_ todos: [Line]) {
+    for todoLine in todos {
+        print("- [ ] Line \(todoLine.number): \(todoLine.content)")
     }
-
-    return todos
 }
 
-let todos = getTodos()
+let filePaths = getModifiedFiles()
+let files = filePaths
+    .compactMap { try? File(filePath: $0) }
+    .filter { !$0.content.isEmpty }
 
-todos.forEach { (file, issues) in
-    print("Todos found in \(file):\n")
-    print(issues)
+for file in files {
+    print("Found TODOs in \(file.name):")
+    let todos = TodoFinder.getTodoLines(in: file)
+    printTodos(todos)
 }

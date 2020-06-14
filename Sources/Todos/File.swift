@@ -6,3 +6,16 @@
 //
 
 import Foundation
+
+struct File {
+    let name: String
+    let content: [Line]
+
+    init?(filePath: String) throws {
+        name = filePath
+        content = try String(contentsOfFile: filePath)
+            .split(separator: "\n")
+            .enumerated()
+            .map { Line(number: $0 + 1, content: String($1)) }
+    }
+}
