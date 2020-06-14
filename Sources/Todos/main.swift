@@ -1,6 +1,9 @@
 import Foundation
 import ShellOut
 
+// TODO: Organize code structure
+// TODO: Only look for TODOs in changed chunks, not the entire file
+
 func getModifiedFiles() -> [String] {
     let gitCommands = [
         "git diff --name-only",
@@ -20,14 +23,27 @@ func getModifiedFiles() -> [String] {
     return gitResult?.split(separator: "\n").map { String($0) } ?? []
 }
 
-func getTodos() -> String? {
+func grepTodo(in file: String) -> String? {
+    let grepCommand = "grep -E -C2 'TODO|FIXME'"
+    return try? shellOut(to: grepCommand, arguments: [file])
+}
+
+func getTodos() -> [String: String] {
     let modifiedFiles = getModifiedFiles()
-    print(modifiedFiles)
 
-    // TODO: grep over all files for TODO and FIXME
+    var todos = [String: String]()
 
-    return "git"
+    for file in modifiedFiles {
+        guard let issues = grepTodo(in: file) else { continue }
+        todos[file] = issues
+    }
+
+    return todos
 }
 
 let todos = getTodos()
-print(todos)
+
+todos.forEach { (file, issues) in
+    print("Todos found in \(file):\n")
+    print(issues)
+}
