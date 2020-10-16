@@ -4,6 +4,7 @@ import Foundation
 // TODO: Only look for TODOs in changed chunks, not the entire file
 // TODO: Add ignore list
 // TODO: Add option to read ignore list from Todosfile
+// TODO: Add an option to list all todos, regardless of the git state
 
 func printTodos(_ todos: [Line]) {
     for todoLine in todos {
