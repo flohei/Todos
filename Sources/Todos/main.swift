@@ -2,10 +2,12 @@ import Foundation
 
 // TODO: Organize code structure
 // TODO: Only look for TODOs in changed chunks, not the entire file
+// TODO: Add ignore list
+// TODO: Add option to read ignore list from Todosfile
 
 func printTodos(_ todos: [Line]) {
     for todoLine in todos {
-        print("- [ ] Line \(todoLine.number): \(todoLine.content)")
+        print("\t✔ Line \(todoLine.number): \(todoLine.content)")
     }
 }
 
@@ -16,7 +18,7 @@ for file in files {
     let todos = TodoFinder.getTodoLines(in: file)
 
     if !todos.isEmpty {
-        print("Found TODOs in \(file.name):")
+        print("📄 \(file.name):")
         printTodos(todos)
     }
 }
